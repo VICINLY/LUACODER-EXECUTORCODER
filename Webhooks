@@ -1,0 +1,116 @@
+import requests
+import time
+import random
+import os
+
+os.system('cls' if os.name == 'nt' else 'clear')
+
+print("=" * 50)
+print("        WEBHOOKS BY VICINLY")
+print("=" * 50)
+print()
+
+# Введи свой вебхук сюда
+WEBHOOK_URL = input("[?] Вставь URL вебхука: ")
+
+if not WEBHOOK_URL:
+    print("[!] Ты ничего не ввел, дебил")
+    exit()
+
+print()
+print("[*] Проверяем вебхук...")
+
+# Проверка вебхука
+try:
+    test = requests.post(WEBHOOK_URL, json={"content": "🔌 **VICINLY CONNECTED** 🔌"}, timeout=10)
+    if test.status_code == 204 or test.status_code == 200:
+        print("[+] Вебхук работает!")
+    else:
+        print(f"[!] Ошибка: {test.status_code}")
+        exit()
+except Exception as e:
+    print(f"[!] Не подключился: {e}")
+    exit()
+
+print()
+print("=" * 50)
+print("1. Отправить HACKED BY VICINLY")
+print("2. Отправить свое сообщение")
+print("3. Спам (100 сообщений)")
+print("4. Выйти")
+print("=" * 50)
+
+while True:
+    try:
+        choice = input("\n[?] Выбери (1-4): ")
+        
+        if choice == "1":
+            # Отправка HACKED BY VICINLY
+            messages = [
+                "🔥 **HACKED BY VICINLY** 🔥\n```SYSTEM COMPROMISED```",
+                "💀 **VICINLY WAS HERE** 💀\n```SERVER HIJACKED```",
+                "⚡ **HACKED BY VICINLY** ⚡",
+                "```diff\n+ HACKED BY VICINLY +\n+ ACCESS GRANTED +\n```",
+                "**🔴 HACKED 🔴**\n**🟢 BY VICINLY 🟢**"
+            ]
+            msg = random.choice(messages)
+            
+            payload = {
+                "content": msg,
+                "username": "VICINLY"
+            }
+            
+            r = requests.post(WEBHOOK_URL, json=payload)
+            if r.status_code == 204 or r.status_code == 200:
+                print("[+] Отправлено!")
+            else:
+                print(f"[!] Ошибка: {r.status_code}")
+        
+        elif choice == "2":
+            # Свое сообщение
+            custom = input("[?] Введи сообщение: ")
+            if custom:
+                name = input("[?] Имя бота (Enter = VICINLY): ")
+                if not name:
+                    name = "VICINLY"
+                
+                payload = {
+                    "content": custom,
+                    "username": name
+                }
+                
+                r = requests.post(WEBHOOK_URL, json=payload)
+                if r.status_code == 204 or r.status_code == 200:
+                    print("[+] Отправлено!")
+                else:
+                    print(f"[!] Ошибка: {r.status_code}")
+        
+        elif choice == "3":
+            # Спам
+            print("[*] Отправка 100 сообщений...")
+            for i in range(100):
+                msg = f"🔥 HACKED BY VICINLY [{i+1}/100] 🔥"
+                payload = {
+                    "content": msg,
+                    "username": f"VICINLY_{i+1}"
+                }
+                try:
+                    requests.post(WEBHOOK_URL, json=payload, timeout=3)
+                    print(f"  [{i+1}] Отправлено")
+                except:
+                    print(f"  [{i+1}] Ошибка")
+                time.sleep(0.2)
+            print("[+] Спам завершен!")
+        
+        elif choice == "4":
+            print("\n[+] Выход. WEBHOOKS BY VICINLY")
+            break
+        
+        else:
+            print("[!] Выбери 1-4")
+            
+    except KeyboardInterrupt:
+        print("\n[!] Выход")
+        break
+    except Exception as e:
+        print(f"[!] Ошибка: {e}")
